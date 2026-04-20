@@ -4,16 +4,19 @@ import google.generativeai as genai
 st.set_page_config(page_title="Eren'in Asistanı", page_icon="🎤", layout="centered")
 
 st.title("🎙️ Eren'in Sesli Asistanı")
-st.markdown("**Gemini - Basit Sesli Mod**")
+st.markdown("**Gemini ile - Paylaşımlı Versiyon**")
 
-api_key = st.sidebar.text_input("🔑 Gemini API Key", type="password")
+# ================== SENİN API KEY'İN BURAYA ==================
+# Buraya kendi Gemini API Key'ini yapıştır
+API_KEY = AIzaSyCe2vaOP8dJVx7psMGX6uso2lbPzxf2qNE
 
-if api_key:
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-2.5-flash')
-else:
-    st.warning("Sol taraftan Gemini API Key gir!")
+if API_KEY == AIzaSyCe2vaOP8dJVx7psMGX6uso2lbPzxf2qNE:
+    st.error("API Key henüz ayarlanmadı. Lütfen geliştiriciyle iletişime geçin.")
     st.stop()
+
+genai.configure(api_key=API_KEY)
+model = genai.GenerativeModel('gemini-2.5-flash')
+# ===========================================================
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -22,7 +25,7 @@ for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-# ====================== SESLİ KONUŞMA ======================
+# Sesli Konuşma
 if st.button("🎤 Konuşmaya Başla", type="primary", use_container_width=True):
     st.info("🔴 Dinliyorum... Konuş ve bitir.")
 
@@ -34,26 +37,18 @@ if st.button("🎤 Konuşmaya Başla", type="primary", use_container_width=True)
 
             recognition.onresult = function(event) {
                 const text = event.results[0][0].transcript;
-                // Streamlit'e metni göndermek için
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.id = 'voice_result';
-                input.value = text;
-                document.body.appendChild(input);
-                input.dispatchEvent(new Event('change'));
-            };
-
-            recognition.onerror = function() {
-                alert("Ses alınamadı. Tekrar dene kanki.");
+                document.getElementById("spoken").value = text;
+                document.getElementById("spoken").dispatchEvent(new Event('input'));
             };
 
             recognition.start();
         </script>
+        <input id="spoken" type="hidden">
     """, height=0)
 
-# Ses sonucunu yakala
-if "voice_result" in st.session_state and st.session_state.voice_result:
-    user_text = st.session_state.voice_result
+# Ses metnini işle
+if "spoken" in st.session_state and st.session_state.spoken:
+    user_text = st.session_state.spoken
 
     st.session_state.messages.append({"role": "user", "content": user_text})
     with st.chat_message("user"):
@@ -64,13 +59,12 @@ if "voice_result" in st.session_state and st.session_state.voice_result:
             response = model.generate_content(user_text)
             cevap = response.text
         except:
-            cevap = "Gemini şu anda cevap veremedi."
+            cevap = "Gemini şu anda cevap veremedi. Kota dolmuş olabilir."
 
     st.session_state.messages.append({"role": "assistant", "content": cevap})
     with st.chat_message("assistant"):
         st.markdown(cevap)
 
-    # Sesli cevap
     st.components.v1.html(f"""
         <script>
             const utterance = new SpeechSynthesisUtterance("{cevap.replace('"', '\\"')}");
@@ -79,9 +73,9 @@ if "voice_result" in st.session_state and st.session_state.voice_result:
         </script>
     """, height=0)
 
-    st.session_state.voice_result = ""
+    st.session_state.spoken = ""
 
-# Yazılı yedek
+# Yazılı giriş
 prompt = st.chat_input("Veya buraya yaz...")
 if prompt:
     st.session_state.messages.append({"role": "user", "content": prompt})
@@ -104,4 +98,4 @@ if prompt:
         </script>
     """, height=0)
 
-st.caption("Butona bas → konuş → bırak. Metin yazılmazsa sayfayı yenile ve tekrar dene.")
+st.caption("Bu uygulama Eren tarafından paylaşılmıştır.")
