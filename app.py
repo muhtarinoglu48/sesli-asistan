@@ -10,7 +10,7 @@ st.markdown("**Gemini ile - Paylaşımlı Versiyon**")
 # Buraya kendi Gemini API Key'ini yapıştır
 API_KEY = AIzaSyCe2vaOP8dJVx7psMGX6uso2lbPzxf2qNE
 
-if API_KEY == AIzaSyCe2vaOP8dJVx7psMGX6uso2lbPzxf2qNE:
+if API_KEY == "BURAYA_KENDİ_API_KEYİNİ_YAPISTIR":
     st.error("API Key henüz ayarlanmadı. Lütfen geliştiriciyle iletişime geçin.")
     st.stop()
 
