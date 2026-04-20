@@ -7,7 +7,7 @@ st.title("🎙️ Eren'in Sesli Asistanı")
 st.markdown("**Gemini - Basit Sesli Mod (Son Versiyon)**")
 
 # ====================== API KEY ======================
-API_KEY = "AIzaSyCe2vaOP8dJVx7psMGX6uso2lbPzxf2qNE"   # ← Buraya kendi key'ini yapıştır
+API_KEY = "AIzaSyCPKofEeAPIuvAt0NCouQbeyrfvppVHCrQ"   # ← Buraya kendi key'ini yapıştır
 
 if API_KEY == "BURAYA_KENDİ_API_KEYİNİ_YAPISTIR":
     st.error("API Key henüz ayarlanmadı.")
