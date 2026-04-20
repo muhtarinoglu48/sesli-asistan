@@ -4,10 +4,10 @@ import google.generativeai as genai
 st.set_page_config(page_title="Eren'in Asistanı", page_icon="🎤", layout="centered")
 
 st.title("🎙️ Eren'in Sesli Asistanı")
-st.markdown("**Gemini - Basit Sesli Mod**")
+st.markdown("**İki Butonlu Sesli Mod**")
 
 # ====================== API KEY ======================
-API_KEY = "AIzaSyCe2vaOP8dJVx7psMGX6uso2lbPzxf2qNE"   # ← Buraya kendi key'ini yapıştır
+API_KEY = "BURAYA_KENDİ_API_KEYİNİ_YAPISTIR"   # ← Buraya kendi key'ini yapıştır
 
 if API_KEY == "BURAYA_KENDİ_API_KEYİNİ_YAPISTIR":
     st.error("API Key henüz ayarlanmadı.")
@@ -24,68 +24,76 @@ for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-# Sesli Konuşma
-if st.button("🎤 Konuşmaya Başla", type="primary", use_container_width=True):
-    st.info("🔴 Dinliyorum... Konuş ve bitirince sayfayı yenile (F5).")
+# İki Buton
+col1, col2 = st.columns(2)
+
+with col1:
+    if st.button("🎤 Konuşmaya Başla", type="primary", use_container_width=True):
+        st.session_state.listening = True
+        st.rerun()
+
+with col2:
+    if st.button("⏹️ Durdur ve Cevap Al", type="secondary", use_container_width=True):
+        st.session_state.listening = False
+        st.rerun()
+
+# Mikrofon Scripti
+if st.session_state.get("listening", False):
+    st.info("🔴 Kayıt başladı... Konuş ve 'Durdur ve Cevap Al' butonuna bas.")
 
     st.components.v1.html("""
         <script>
             const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
             recognition.lang = 'tr-TR';
-            recognition.interimResults = false;
+            recognition.continuous = true;
+            recognition.interimResults = true;
 
             recognition.onresult = function(event) {
-                const text = event.results[0][0].transcript;
-                // Basit yöntemle metni göster
-                const p = document.createElement('p');
-                p.innerText = "Anlaşılan metin: " + text;
-                p.style.color = "green";
-                document.body.appendChild(p);
-                
-                // Streamlit'e göndermek için
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.id = 'voice_result';
-                input.value = text;
-                document.body.appendChild(input);
-                input.dispatchEvent(new Event('change'));
+                let transcript = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    transcript += event.results[i][0].transcript + ' ';
+                }
+                document.getElementById("voice_text").value = transcript.trim();
+                document.getElementById("voice_text").dispatchEvent(new Event('input'));
             };
 
             recognition.start();
         </script>
+        <input id="voice_text" type="hidden">
     """, height=0)
 
-# Ses sonucunu yakala
-if "voice_result" in st.session_state and st.session_state.voice_result:
-    user_text = st.session_state.voice_result
+# Durdur butonuna basınca cevap ver
+if "voice_text" in st.session_state and st.session_state.voice_text and not st.session_state.get("listening", False):
+    user_text = st.session_state.voice_text.strip()
 
-    st.session_state.messages.append({"role": "user", "content": user_text})
-    with st.chat_message("user"):
-        st.markdown(user_text)
+    if user_text:
+        st.session_state.messages.append({"role": "user", "content": user_text})
+        with st.chat_message("user"):
+            st.markdown(user_text)
 
-    with st.spinner("Gemini cevap veriyor..."):
-        try:
-            response = model.generate_content(user_text)
-            cevap = response.text
-        except:
-            cevap = "Gemini cevap veremedi."
+        with st.spinner("Gemini cevap veriyor..."):
+            try:
+                response = model.generate_content(user_text)
+                cevap = response.text
+            except:
+                cevap = "Gemini şu anda cevap veremedi."
 
-    st.session_state.messages.append({"role": "assistant", "content": cevap})
-    with st.chat_message("assistant"):
-        st.markdown(cevap)
+        st.session_state.messages.append({"role": "assistant", "content": cevap})
+        with st.chat_message("assistant"):
+            st.markdown(cevap)
 
-    # Sesli cevap
-    st.components.v1.html(f"""
-        <script>
-            const utterance = new SpeechSynthesisUtterance("{cevap.replace('"', '\\"')}");
-            utterance.lang = 'tr-TR';
-            speechSynthesis.speak(utterance);
-        </script>
-    """, height=0)
+        # Sesli cevap oku
+        st.components.v1.html(f"""
+            <script>
+                const utterance = new SpeechSynthesisUtterance("{cevap.replace('"', '\\"')}");
+                utterance.lang = 'tr-TR';
+                speechSynthesis.speak(utterance);
+            </script>
+        """, height=0)
 
-    st.session_state.voice_result = ""
+        st.session_state.voice_text = ""
 
-# Yazılı yedek
+# Yazılı giriş
 prompt = st.chat_input("Veya buraya yaz...")
 if prompt:
     st.session_state.messages.append({"role": "user", "content": prompt})
@@ -108,4 +116,4 @@ if prompt:
         </script>
     """, height=0)
 
-st.caption("Butona bas → konuş → bitince sayfayı yenile (F5).")
+st.caption("Konuşmaya Başla butonuna bas → konuş → Durdur ve Cevap Al butonuna bas")
