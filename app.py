@@ -7,7 +7,7 @@ st.title("🧠 Eren'in Zeki Asistanı")
 st.markdown("**Gemini 2.5 Flash - Kusursuz Mod**")
 
 # ====================== API KEY ======================
-API_KEY = "BURAYA_KENDİ_GEMINI_API_KEYİNİ_YAPISTIR"   # ← Buraya kendi key'ini yapıştır
+API_KEY = "AIzaSyCCSVWIFu-1aRXLr9gETtpSUlwdYIbaihA"   # ← Buraya kendi key'ini yapıştır
 
 if API_KEY == "BURAYA_KENDİ_GEMINI_API_KEYİNİ_YAPISTIR":
     st.error("API Key henüz ayarlanmadı.")
