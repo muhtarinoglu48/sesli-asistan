@@ -7,7 +7,7 @@ st.title("SpeakZone")
 st.markdown("**SpeakZone-Basit Komutlu**")
 
 # ====================== API KEY ======================
-API_KEY = "AIzaSyCPKofEeAPIuvAt0NCouQbeyrfvppVHCrQ"   # ← Buraya kendi key'ini yapıştır
+API_KEY = "AIzaSyCCSVWIFu-1aRXLr9gETtpSUlwdYIbaihA"   # ← Buraya kendi key'ini yapıştır
 
 if API_KEY == "BURAYA_KENDİ_API_KEYİNİ_YAPISTIR":
     st.error("API Key henüz ayarlanmadı.")
