@@ -75,7 +75,7 @@ if "voice_input" in st.session_state and st.session_state.voice_input and not st
         with st.chat_message("user"):
             st.markdown(user_text)
 
-        with st.spinner("Gemini cevap veriyor..."):
+        with st.spinner("SpeakZone cevap veriyor..."):
             try:
                 response = model.generate_content(user_text)
                 cevap = response.text
@@ -103,7 +103,7 @@ if prompt:
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    with st.spinner("Gemini düşünüyor..."):
+    with st.spinner("SpeakZone düşünüyor..."):
         response = model.generate_content(prompt)
         cevap = response.text
 
