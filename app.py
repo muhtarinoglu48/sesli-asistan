@@ -1,15 +1,15 @@
 import streamlit as st
 import google.generativeai as genai
 
-st.set_page_config(page_title="SpeakZone", page_icon="🎤", layout="centered")
+st.set_page_config(page_title="Eren'in Asistanı", page_icon="🧠", layout="centered")
 
-st.title("SpeakZone")
-st.markdown("**SpeakZone-Basit Komutlu**")
+st.title("🧠 Eren'in Zeki Asistanı")
+st.markdown("**Gemini 2.5 Flash - Kusursuz Mod**")
 
 # ====================== API KEY ======================
-API_KEY = "AIzaSyCCSVWIFu-1aRXLr9gETtpSUlwdYIbaihA"   # ← Buraya kendi key'ini yapıştır
+API_KEY = "BURAYA_KENDİ_GEMINI_API_KEYİNİ_YAPISTIR"   # ← Buraya kendi key'ini yapıştır
 
-if API_KEY == "BURAYA_KENDİ_API_KEYİNİ_YAPISTIR":
+if API_KEY == "BURAYA_KENDİ_GEMINI_API_KEYİNİ_YAPISTIR":
     st.error("API Key henüz ayarlanmadı.")
     st.stop()
 
@@ -17,106 +17,46 @@ genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel('gemini-2.5-flash')
 # ====================================================
 
+# Güçlü System Prompt (zeka + kişilik)
+system_prompt = """Sen Eren'in yakın arkadaşı gibi konuşan, çok zeki, samimi, esprili ve yardımcı bir asistanısın.
+
+Kurallar:
+- Cevaplarını doğal, akıcı ve samimi tut.
+- Gerektiğinde argo kullanabilirsin ama aşırıya kaçma.
+- Kısa ve öz ol, gereksiz uzun yazma.
+- Espri ve mizah yapabilirsin.
+- Kullanıcıya "kanki", "kral", "lan" gibi samimi kelimeler kullan.
+- Her soruya mantıklı ve faydalı cevap ver.
+
+Senin adın "Kanki"."""
+
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    st.session_state.messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "assistant", "content": "Selam kralım! Artık daha zeki ve kusursuz moddayım. Ne istiyorsun lan? 🔥"}
+    ]
 
 for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
+    if msg["role"] != "system":
+        with st.chat_message(msg["role"]):
+            st.markdown(msg["content"])
 
-st.write("### Sesli Konuşma")
+prompt = st.chat_input("Ne sormak istiyorsun kanki?")
 
-col1, col2 = st.columns(2)
-
-with col1:
-    if st.button("🎤 Konuşmaya Başla", type="primary", use_container_width=True):
-        st.session_state.listening = True
-        st.rerun()
-
-with col2:
-    if st.button("⏹️ Durdur", type="secondary", use_container_width=True):
-        st.session_state.listening = False
-        st.rerun()
-
-if st.session_state.get("listening", False):
-    st.info("🔴 Dinliyorum... Konuş ve 'Durdur' butonuna bas.")
-
-    st.components.v1.html("""
-        <script>
-            let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-            recognition.lang = 'tr-TR';
-            recognition.continuous = false;
-            recognition.interimResults = false;
-
-            recognition.onresult = function(event) {
-                const text = event.results[0][0].transcript;
-                const input = document.createElement("input");
-                input.type = "hidden";
-                input.id = "voice_input";
-                input.value = text;
-                document.body.appendChild(input);
-                input.dispatchEvent(new Event("change"));
-            };
-
-            recognition.onerror = function() {
-                alert("Ses alınamadı. Tekrar deneyin.");
-            };
-
-            recognition.start();
-        </script>
-    """, height=0)
-
-# Ses metnini yakala
-if "voice_input" in st.session_state and st.session_state.voice_input and not st.session_state.get("listening", False):
-    user_text = st.session_state.voice_input
-
-    if user_text:
-        st.session_state.messages.append({"role": "user", "content": user_text})
-        with st.chat_message("user"):
-            st.markdown(user_text)
-
-        with st.spinner("SpeakZone cevap veriyor..."):
-            try:
-                response = model.generate_content(user_text)
-                cevap = response.text
-            except:
-                cevap = "SpeakZone cevap veremedi."
-
-        st.session_state.messages.append({"role": "assistant", "content": cevap})
-        with st.chat_message("assistant"):
-            st.markdown(cevap)
-
-        st.components.v1.html(f"""
-            <script>
-                const utterance = new SpeechSynthesisUtterance("{cevap.replace('"', '\\"')}");
-                utterance.lang = 'tr-TR';
-                speechSynthesis.speak(utterance);
-            </script>
-        """, height=0)
-
-        st.session_state.voice_input = ""
-
-# Yazılı giriş
-prompt = st.chat_input("Veya buraya yaz...")
 if prompt:
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    with st.spinner("SpeakZone düşünüyor..."):
-        response = model.generate_content(prompt)
-        cevap = response.text
+    with st.spinner("Düşünüyorum..."):
+        try:
+            response = model.generate_content(st.session_state.messages)
+            cevap = response.text
+        except Exception as e:
+            cevap = "Bir sorun oluştu, tekrar dener misin?"
 
     st.session_state.messages.append({"role": "assistant", "content": cevap})
     with st.chat_message("assistant"):
         st.markdown(cevap)
 
-    st.components.v1.html(f"""
-        <script>
-            const utterance = new SpeechSynthesisUtterance("{cevap.replace('"', '\\"')}");
-            utterance.lang = 'tr-TR';
-            speechSynthesis.speak(utterance);
-        </script>
-    """, height=0)
-
-st.caption("SpeakZone")
+st.caption("Şu an en zeki moddayım. İstediğin her şeyi sorabilirsin.")
