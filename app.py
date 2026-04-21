@@ -1,10 +1,10 @@
 import streamlit as st
 import google.generativeai as genai
 
-st.set_page_config(page_title="Eren'in Asistanı", page_icon="🎤", layout="centered")
+st.set_page_config(page_title="SpeakZone", page_icon="🎤", layout="centered")
 
-st.title("🎙️ Eren'in Sesli Asistanı")
-st.markdown("**Gemini - Basit Sesli Mod (Son Versiyon)**")
+st.title("SpeakZone")
+st.markdown("**SpeakZone-Basit Komutlu**")
 
 # ====================== API KEY ======================
 API_KEY = "AIzaSyCPKofEeAPIuvAt0NCouQbeyrfvppVHCrQ"   # ← Buraya kendi key'ini yapıştır
@@ -80,7 +80,7 @@ if "voice_input" in st.session_state and st.session_state.voice_input and not st
                 response = model.generate_content(user_text)
                 cevap = response.text
             except:
-                cevap = "Gemini cevap veremedi."
+                cevap = "SpeakZone cevap veremedi."
 
         st.session_state.messages.append({"role": "assistant", "content": cevap})
         with st.chat_message("assistant"):
@@ -119,4 +119,4 @@ if prompt:
         </script>
     """, height=0)
 
-st.caption("Konuşmaya Başla → Konuş → Durdur butonuna bas. Hâlâ yazmıyorsa sayfayı yenile (F5).")
+st.caption("SpeakZone")
