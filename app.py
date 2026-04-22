@@ -3,7 +3,7 @@ import google.generativeai as genai
 
 st.set_page_config(page_title="Eren'in Asistanı", page_icon="🧠", layout="centered")
 
-st.title("Sude")
+st.title("SpeakZone")
 st.markdown("**SpeakZone - Kusursuz Mod**")
 
 # ====================== API KEY ======================
