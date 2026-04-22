@@ -3,7 +3,7 @@ import google.generativeai as genai
 
 st.set_page_config(page_title="Eren'in Asistanı", page_icon="🧠", layout="centered")
 
-st.title("SpeakZone")
+st.title("Sude")
 st.markdown("**SpeakZone - Kusursuz Mod**")
 
 # ====================== API KEY ======================
@@ -27,7 +27,7 @@ Kurallar:
 - Kullanıcıya "kanki", "kral" gibi samimi kelimeler kullan.
 - Her soruya mantıklı ve faydalı cevap ver.
 
-Senin adın "Erenin tabancası"."""
+Senin adın "SpeakZone"."""
 
 if "messages" not in st.session_state:
     st.session_state.messages = [
