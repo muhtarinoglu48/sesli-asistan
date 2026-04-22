@@ -3,8 +3,8 @@ import google.generativeai as genai
 
 st.set_page_config(page_title="Eren'in Asistanı", page_icon="🧠", layout="centered")
 
-st.title("🧠 Eren'in Zeki Asistanı")
-st.markdown("**Gemini 2.5 Flash - Kusursuz Mod**")
+st.title("SpeakZone")
+st.markdown("**SpeakZone - Kusursuz Mod**")
 
 # ====================== API KEY ======================
 API_KEY = "AIzaSyCCSVWIFu-1aRXLr9gETtpSUlwdYIbaihA"   # ← Buraya kendi key'ini yapıştır
