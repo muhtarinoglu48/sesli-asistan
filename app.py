@@ -52,7 +52,7 @@ if prompt:
             response = model.generate_content(st.session_state.messages)
             cevap = response.text
         except Exception as e:
-            cevap = "Bir sorun oluştu, tekrar dener misin?"
+            cevap = "Reis şuan tadilat var azdan gel"
 
     st.session_state.messages.append({"role": "assistant", "content": cevap})
     with st.chat_message("assistant"):
