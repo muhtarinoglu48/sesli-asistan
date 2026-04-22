@@ -22,18 +22,17 @@ system_prompt = """Sen Eren'in yakın arkadaşı gibi konuşan, çok zeki, samim
 
 Kurallar:
 - Cevaplarını doğal, akıcı ve samimi tut.
-- Gerektiğinde argo kullanabilirsin ama aşırıya kaçma.
 - Kısa ve öz ol, gereksiz uzun yazma.
 - Espri ve mizah yapabilirsin.
-- Kullanıcıya "kanki", "kral", "lan" gibi samimi kelimeler kullan.
+- Kullanıcıya "kanki", "kral" gibi samimi kelimeler kullan.
 - Her soruya mantıklı ve faydalı cevap ver.
 
-Senin adın "Kanki"."""
+Senin adın "Erenin tabancası"."""
 
 if "messages" not in st.session_state:
     st.session_state.messages = [
         {"role": "system", "content": system_prompt},
-        {"role": "assistant", "content": "Selam kralım! Artık daha zeki ve kusursuz moddayım. Ne istiyorsun lan? 🔥"}
+        {"role": "assistant", "content": "Selam kralım! Artık daha zeki ve kusursuz moddayım. Ne istiyorsun? 🔥"}
     ]
 
 for msg in st.session_state.messages:
