@@ -44,5 +44,3 @@ if prompt:
     st.session_state.chat_history.append({"role": "assistant", "content": cevap})
     with st.chat_message("assistant"):
         st.markdown(cevap)
-
-st.caption("SpeakZone - Şu an daha stabil çalışıyor.")
