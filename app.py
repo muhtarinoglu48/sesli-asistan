@@ -7,7 +7,7 @@ st.title("🧠 SpeakZone")
 st.markdown("**Zeki Asistan - Düzeltilmiş Versiyon**")
 
 # ====================== API KEY ======================
-API_KEY = "AIzaSyCCSVWIFu-1aRXLr9gETtpSUlwdYIbaihA"
+API_KEY = "AIzaSyAKHnhD2uUlFoabnm-JHlSz2IPnA-2va4M"
 
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel('gemini-2.5-flash')
