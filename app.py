@@ -58,4 +58,4 @@ if prompt:
     with st.chat_message("assistant"):
         st.markdown(cevap)
 
-st.caption("Şu an en zeki moddayım. İstediğin her şeyi sorabilirsin.")
+st.caption("Şu an en zeki moddayım. İstediğin her şeyi sorabilirsin")
