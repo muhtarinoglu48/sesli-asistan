@@ -4,55 +4,47 @@ import google.generativeai as genai
 st.set_page_config(page_title="SpeakZone", page_icon="🧠", layout="centered")
 
 st.title("🧠 SpeakZone")
-st.markdown("**Kusursuz Zeki Asistan**")
+st.markdown("**Zeki Asistan**")
 
-# ====================== API KEY ======================
+# API KEY
 API_KEY = "AIzaSyCCSVWIFu-1aRXLr9gETtpSUlwdYIbaihA"
 
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel('gemini-2.5-flash')
-# ====================================================
 
-# Güçlü System Prompt
-system_prompt = """Sen SpeakZone adlı çok zeki, samimi ve esprili bir yapay zeka asistanısın. 
-Kullanıcıyla yakın arkadaş gibi konuş. 
-Cevaplarını kısa, net ve doğal tut. 
-Espri yapabilirsin. 
-Kullanıcıya "kanki", "kral", "reis" gibi samimi kelimeler kullanabilirsin. 
-Her soruya mantıklı ve faydalı cevap ver."""
-
+# System Prompt
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "system", "content": system_prompt},
-        {"role": "assistant", "content": "Selam kralım! Ben SpeakZone. Ne istiyorsun bugün? 🔥"}
+        {"role": "user", "content": "Sen SpeakZone adlı zeki, samimi ve esprili bir asistansın. Kullanıcıyla arkadaş gibi konuş. Cevaplarını kısa ve doğal tut."},
+        {"role": "model", "content": "Tamam kralım, anlaştık. Ne istiyorsun?"}
     ]
 
-# Mesajları göster
 for msg in st.session_state.messages:
-    if msg["role"] != "system":
-        with st.chat_message(msg["role"]):
+    if msg["role"] == "user":
+        with st.chat_message("user"):
+            st.markdown(msg["content"])
+    elif msg["role"] == "model":
+        with st.chat_message("assistant"):
             st.markdown(msg["content"])
 
-# Kullanıcı girişi
 prompt = st.chat_input("Ne sormak istiyorsun?")
 
 if prompt:
-    # Kullanıcı mesajını ekle
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
     with st.spinner("Düşünüyorum..."):
         try:
-            # Tüm sohbet geçmişini modele gönder
-            response = model.generate_content(st.session_state.messages)
+            # Daha stabil yöntem
+            chat = model.start_chat(history=st.session_state.messages[:-1])
+            response = chat.send_message(prompt)
             cevap = response.text
         except Exception as e:
-            cevap = "Bir sorun oluştu, tekrar dener misin kanki?"
+            cevap = f"Bir hata oluştu: {str(e)}"
 
-    # Asistan cevabını ekle
-    st.session_state.messages.append({"role": "assistant", "content": cevap})
+    st.session_state.messages.append({"role": "model", "content": cevap})
     with st.chat_message("assistant"):
         st.markdown(cevap)
 
-st.caption("Sohbet geçmişini hatırlıyorum. İstediğin kadar devam edebilirsin.")
+st.caption("SpeakZone - Sohbet devam ediyor")
