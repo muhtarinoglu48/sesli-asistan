@@ -4,7 +4,7 @@ import google.generativeai as genai
 st.set_page_config(page_title="SpeakZone", page_icon="🧠", layout="centered")
 
 st.title("🧠 SpeakZone")
-st.markdown("**Zeki Asistan - Düzeltilmiş Versiyon**")
+st.markdown("**Yardımcı Asistan**")
 
 # ====================== API KEY ======================
 API_KEY = "AIzaSyA0loFU1S9HOnREY49Gqqb_4V2lJ7V5aF8"
