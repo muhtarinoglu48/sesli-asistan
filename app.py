@@ -4,7 +4,7 @@ import google.generativeai as genai
 st.set_page_config(page_title="SpeakZone", page_icon="🧠", layout="centered")
 
 st.title("🧠 SpeakZone")
-st.markdown("**Yardımcı Asistan**")
+st.markdown("**Yardımcı Yazılı Asistan**")
 
 # ====================== API KEY ======================
 API_KEY = "AIzaSyDrZqD4mXpaF8QuGfeS3kDn06ftQzgl7D8"
